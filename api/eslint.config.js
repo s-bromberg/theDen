@@ -1,18 +1,26 @@
-import { defineConfig } from "eslint/config";
-import globals from "globals";
-import js from "@eslint/js";
-
+import { defineConfig } from 'eslint/config';
+import globals from 'globals';
+import js from '@eslint/js';
+import eslintConfigPrettier from 'eslint-config-prettier/flat';
 
 export default defineConfig([
-  { files: ["**/*.{js,mjs,cjs}"] },
-  { files: ["**/*.{js,mjs,cjs}"], languageOptions: { globals: globals.node } },
-  { files: ["**/*.{js,mjs,cjs}"], plugins: { js }, extends: ["js/recommended"] },
+  { files: ['**/*.{js,mjs,cjs}'] },
+  {
+    files: ['**/*.{js,mjs,cjs}'],
+    languageOptions: { globals: globals.node },
+  },
+  {
+    files: ['**/*.{js,mjs,cjs}'],
+    plugins: { js },
+    extends: ['js/recommended'],
+  },
   {
     rules: {
-      camelcase: "error" ,
-      "no-var": "error",
-      "prefer-const": "error",
-      eqeqeq: ["error", "always"],
-    }
-  }
+      camelcase: 'error',
+      'no-var': 'error',
+      'prefer-const': 'error',
+      eqeqeq: ['error', 'always'],
+    },
+  },
+  eslintConfigPrettier,
 ]);

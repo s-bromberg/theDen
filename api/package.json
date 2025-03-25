@@ -7,11 +7,20 @@
   "type": "module",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon src/app.js",
+    "lint": "eslint .",
+    "format": "prettier --write \"**/*.{js,json}\""
   },
   "devDependencies": {
     "@eslint/js": "^9.23.0",
     "eslint": "^9.23.0",
-    "globals": "^16.0.0"
+    "eslint-config-prettier": "^10.1.1",
+    "globals": "^16.0.0",
+    "prettier": "3.5.3"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mysql2": "^3.14.0"
   }
 }
