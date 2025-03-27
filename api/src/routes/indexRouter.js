@@ -14,7 +14,10 @@ router.get('/', async (req, res, next) => {
     order by p.created_at DESC
     limit ?, ?`;
   try {
-    const [results] = await pool.execute(sql, [req.query.offset, req.query.limit]);
+    const [results] = await pool.execute(sql, [
+      req.query.offset,
+      req.query.limit,
+    ]);
 
     res.send(results);
   } catch (err) {
