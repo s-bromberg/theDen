@@ -56,13 +56,44 @@ router.post('/register', async (req, res, next) => {
       // .location(`/users/${createdUser.id}`)
       .send(createdUser);
   } catch (err) {
-    console.log('in catch --->', err);
+    // console.log('in catch --->', err);
     if (err.code === 'ER_DUP_ENTRY') {
       err.message = err.sqlMessage.includes('email') ? 'Email already exists' : 'Username already exists';
       err.statusCode = 409;
     }
-    return next(err);
+    next(err);
   }
+});
+
+router.post('/login', async (req, res, next) => {
+  const { username, password } = req.body;
+  try {
+    const [[userResult]] = await pool.execute(
+      'SELECT * FROM users WHERE username = ?',
+      [username],
+    );
+
+    console.log('userResult -->', userResult);
+
+    if (!userResult || !await bcrypt.compare(password, userResult.password)) {
+      const error = new Error('Invalid credentials');
+      error.statusCode = 401;
+      throw error;
+    }
+
+    req.session.user = userResult;
+    res.end();
+  } catch (err) {
+    console.log('in catch --->', err);
+    next(err);
+  }
+});
+
+router.post('/logout', (req, res) => {
+  // console.log('before destroy --->', req.session)
+  req.session.destroy();
+  // console.log('after destroy --->', req.session)
+  res.status(204).end();
 });
 
 export default router;
