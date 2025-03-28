@@ -1,10 +1,10 @@
 import express from 'express';
 import http from 'http';
 import 'dotenv/config';
-import indexRouter from './routes/postsRouter.js';
+import postsRouter from './routes/postsRouter.js';
 import authRouter from './routes/authRouter.js';
 import session from 'express-session';
-import mysqlSession  from 'express-mysql-session';
+import mysqlSession from 'express-mysql-session';
 import pool from './db/pool.js';
 
 const app = express();
@@ -25,7 +25,7 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use('/posts', indexRouter);
+app.use('/posts', postsRouter);
 app.use('/auth', authRouter);
 
 app.use((req, res, next) => {
