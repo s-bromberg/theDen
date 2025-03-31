@@ -1,8 +1,7 @@
 import express from 'express';
 import pool from '../db/pool.js';
-import { newUserSchema, validate } from '../validation/dataValidation.js';
+import validate, { newUserSchema } from '../validation/dataValidation.js';
 import bcrypt from 'bcrypt';
-import e from 'express';
 
 const router = express.Router();
 
@@ -23,8 +22,7 @@ router.post('/register', validate(newUserSchema), async (req, res, next) => {
 
     // console.log(results);
 
-    res
-      .status(201)
+    res.status(201)
       // .location(`/users/${createdUser.id}`)
       .send({
         id: results.insertId,
@@ -64,10 +62,7 @@ router.post('/login', async (req, res, next) => {
 
     req.session.user = {
       id: userResult.id,
-      username: userResult.username,
-      firstName: userResult.first_name,
-      lastName: userResult.last_name,
-      email: userResult.email,
+      username: userResult.username
     };
 
     res.send(req.session.user);

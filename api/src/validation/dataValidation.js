@@ -20,7 +20,15 @@ export const newUserSchema = Joi.object({
   }),
 });
 
-export const validate = schema => {
+export const postSchema = Joi.object({
+  title: Joi.string().max(50).required(),
+
+  body: Joi.string().required(),
+
+  category: Joi.string().valid('NFL', 'MLB', 'NBA', 'NHL').required()
+});
+
+export default schema => {
   return (req, res, next) => {
     const { error } = schema.validate(req.body);
     if (error) {
