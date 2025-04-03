@@ -1,8 +1,10 @@
 import express from 'express';
 import http from 'http';
 import 'dotenv/config';
-import postsRouter from './routes/postsRouter.js';
-import authRouter from './routes/authRouter.js';
+import postsRouter from './routes/posts.js';
+import authRouter from './routes/auth.js';
+import commentsRouter from './routes/comments.js';
+import userRouter from './routes/users.js';
 import session from 'express-session';
 import mysqlSession from 'express-mysql-session';
 import pool from './db/pool.js';
@@ -25,8 +27,10 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use('/posts', postsRouter);
 app.use('/auth', authRouter);
+app.use('/posts', postsRouter);
+app.use('/comments', commentsRouter);
+app.use('/users', userRouter);
 
 app.use((req, res, next) => {
   const error = new Error('Not found');

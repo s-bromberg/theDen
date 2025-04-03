@@ -7,11 +7,16 @@ export const newUserSchema = Joi.object({
 
   username: Joi.string().alphanum().min(3).max(30).required(),
 
-  password: Joi.string().pattern(
-    new RegExp(
-      '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&#])[A-Za-z\\d@$!%*?&#]{8,20}$',
-    ),
-  ),
+  password: Joi.string()
+    .pattern(
+      new RegExp(
+        '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&#])[A-Za-z\\d@$!%*?&#]{8,20}$',
+      ),
+    )
+    .messages({
+      'string.pattern.base':
+        'Password must be between 8 and 20 characters, include at least one uppercase letter, one lowercase letter, one number, and one special character',
+    }),
 
   repeatPassword: Joi.ref('password'),
 
@@ -25,15 +30,24 @@ export const postSchema = Joi.object({
 
   body: Joi.string().required(),
 
-  category: Joi.string().valid('NFL', 'MLB', 'NBA', 'NHL').required()
+  category: Joi.string().valid('NFL', 'MLB', 'NBA', 'NHL').required(),
 });
 
-export default schema => {
+
+export const commentsSchema = Joi.object({
+  title: Joi.string().max(50).required(),
+
+  body: Joi.string().required(),
+
+  postId: Joi.number().integer().positive().required(),
+});
+
+export const validate = schema => {
   return (req, res, next) => {
     const { error } = schema.validate(req.body);
     if (error) {
       error.statusCode = 422;
-      // console.log('error --> ', error);
+      console.log('error --> ', error);
       next(error);
     } else {
       next();

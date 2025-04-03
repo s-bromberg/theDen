@@ -6,6 +6,6 @@ export default (req, res, next) => {
     error.statusCode = 401;
     return next(error);
   }
-  
+
   next();
 };
