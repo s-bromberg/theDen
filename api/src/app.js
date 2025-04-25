@@ -1,6 +1,7 @@
 import express from 'express';
 import http from 'http';
 import 'dotenv/config';
+import cors from 'cors';
 import postsRouter from './routes/posts.js';
 import authRouter from './routes/auth.js';
 import commentsRouter from './routes/comments.js';
@@ -24,13 +25,17 @@ app.use(
   }),
 );
 
+app.use(cors({
+  origin: 'http://localhost:5173',
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use('/auth', authRouter);
-app.use('/posts', postsRouter);
-app.use('/comments', commentsRouter);
-app.use('/users', userRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/posts', postsRouter);
+app.use('/api/comments', commentsRouter);
+app.use('/api/users', userRouter);
 
 app.use((req, res, next) => {
   const error = new Error('Not found');

@@ -38,9 +38,9 @@ router
     sql += `
       ${whereClause} 
       ORDER BY p.created_at DESC
-      LIMIT ?, ?`; 
+      LIMIT ?, ?`;
 
-    bindParams.push(offset, limit); 
+    bindParams.push(offset, limit);
 
     try {
       const [posts] = await pool.execute(sql, bindParams);
@@ -85,15 +85,15 @@ router
   });
 
 router.get('/:postId', async (req, res, next) => {
-  const sql = `
+  /*const sql = `
     SELECT p.id, p.author, p.title, p.body, p.created_at, c.category_name
     FROM posts p
     JOIN categories c 
     ON c.id = p.category
-    WHERE p.id = ?`;
+    WHERE p.id = ?`;*/
 
   try {
-    const [post] = await pool.execute(sql, [req.params.postId]);
+    const [post] = await pool.execute(`${req.sql} WHERE p.id = ?`, [req.params.postId]);
     console.log('results -->', post);
 
     res.send(post);

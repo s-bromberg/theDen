@@ -16,8 +16,7 @@ router.post('/register', validate(newUserSchema), async (req, res, next) => {
     );
 
     if (results.affectedRows === 0) {
-      const error = new Error('User could not be created');
-      throw error;
+      throw new Error('User could not be created');
     }
 
     // console.log(results);
