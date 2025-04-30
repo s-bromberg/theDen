@@ -37,7 +37,7 @@ router
 
     sql += `
       ${whereClause} 
-      ORDER BY p.created_at DESC
+      ORDER BY p.created_at DESC, p.id DESC
       LIMIT ?, ?`;
 
     bindParams.push(offset, limit);
@@ -83,6 +83,19 @@ router
       next(err);
     }
   });
+
+router.get('/count', async (req, res, next) => {
+  try {
+    const [[postCount]] = await pool.execute(
+      'SELECT COUNT(*) as postCount from posts'
+    )
+    console.log('result -->', postCount);
+    res.send(postCount);
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+})
 
 router.get('/:postId', async (req, res, next) => {
   /*const sql = `
