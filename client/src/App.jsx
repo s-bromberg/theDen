@@ -21,13 +21,13 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <NavBar />
       <Box
         sx={{
           px: { xs: 0, sm: 5, md: 7 },
         }}
       >
-        <NavBar />
-        <p cSpell:disable>
+        {/* <p cSpell:disable>
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Id, ullam
           eaque optio inventore, voluptas vel eius perspiciatis, voluptatibus
           quisquam odit mollitia fugit qui! Quia ea ratione ad illo error
@@ -97,7 +97,7 @@ function App() {
           tenetur facilis saepe repellat et aliquam. Quibusdam, nemo doloribus
           vel unde veritatis, quia exercitationem at explicabo quasi fugiat
           alias ipsa inventore!
-        </p>
+        </p> */}
         <Outlet />
         <footer>footer</footer>
       </Box>
