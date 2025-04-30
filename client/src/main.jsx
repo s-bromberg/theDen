@@ -11,7 +11,7 @@ import {
   Route,
   Routes,
 } from 'react-router';
-import Posts from './Posts.jsx';
+import Posts from './Posts/Posts.jsx';
 
 /*const postsLoader = ({ request }) => {
   console.log(request);

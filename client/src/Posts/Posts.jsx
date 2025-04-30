@@ -1,5 +1,7 @@
-import { Pagination } from '@mui/material';
+import { Box, Pagination } from '@mui/material';
 import { useEffect, useState } from 'react';
+import io from 'socket.io-client';
+import NewPostAlert from './NewPostAlert';
 // import { /*useLoaderData,*/ useNavigate } from "react-router";
 // add mui backdrop component on load
 // mui pagination component for navigating posts
@@ -11,6 +13,8 @@ export default function Posts() {
   // const navigate = useNavigate();
   const [offset, setOffset] = useState(0);
   const [newestPost, setNewestPost] = useState(0);
+  const [snackbarState, setSnackbarState] = useState(false);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     (async () => {
@@ -40,26 +44,52 @@ export default function Posts() {
         console.error(err);
       }
     })();
-  }, [newestPost]);
+  }, []);
+
+  const socket = io('http://localhost:8080');
+
+  useEffect(() => {
+    const receivePost = newPost => {
+      //Update array if user is looking at newest posts else show snackbar with alert
+      if (offset === 0) {
+        const postsDeepCopy = structuredClone(posts);
+        postsDeepCopy.pop();
+        postsDeepCopy.unshift(newPost);
+        setPosts(postsDeepCopy);
+      } else {
+        setSnackbarState(true);
+      }
+
+      setNewestPost(newestPost + 1);
+    };
+
+    socket.on('newPost', receivePost)
+
+    return () => socket.off('newPost', receivePost)
+  }, [offset, newestPost, posts, socket]);
 
   const displayPosts = () => {
     posts.forEach(p => console.log(new Date(p.created_at).toLocaleString()));
     return (posts.map(post => (
       <div key={post.id}>
-        {post.id}:{post.title}:at:{new Date(post.created_at).toLocaleString()}
+        {post.id} - by:{post.author} - {post.title} - {post.body} - at:{new Date(post.created_at).toLocaleString()}
       </div>)
     ))
   }
 
+  const handlePageChange = (e, page) => {
+    setOffset(LIMIT * (page - 1))
+    setPage(page);
+  }
   return (
     posts.length ?
-    <>
-      {/* {data.map(post => <div key={post.id}>{post.id}:{post.title}`</div>)} */}
-      <div>
-        {displayPosts()}
-      </div>
-      <Pagination count={Math.ceil(newestPost / 5)} shape="rounded" onChange={(e, page) => setOffset(LIMIT * (page - 1))} />
-    </>
-    : <div>no length</div>
+      <Box>
+        <NewPostAlert snackbarState={snackbarState} setSnackbarState={setSnackbarState} changePage={handlePageChange}/>
+        <div>
+          {displayPosts()}
+        </div>
+        <Pagination count={Math.ceil(newestPost / 5)} shape="rounded" page={page} onChange={handlePageChange} />
+      </Box>
+      : <div>no length</div>
   );
 }
