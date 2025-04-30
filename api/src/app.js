@@ -1,5 +1,6 @@
 import express from 'express';
 import http from 'http';
+import { Server } from 'socket.io';
 import 'dotenv/config';
 import cors from 'cors';
 import postsRouter from './routes/posts.js';
@@ -12,6 +13,9 @@ import pool from './db/pool.js';
 
 const app = express();
 const server = http.createServer(app);
+const io = new Server(server, {
+  cors: 'http://localhost:5173'
+})
 
 const MySQLStore = mysqlSession(session);
 const sessionStore = new MySQLStore({}, pool);
@@ -28,6 +32,11 @@ app.use(
 app.use(cors({
   origin: 'http://localhost:5173',
 }));
+
+app.use((req, res, next) => {
+  req.io = io;
+  next();
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
