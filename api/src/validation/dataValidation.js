@@ -33,7 +33,6 @@ export const postSchema = Joi.object({
   category: Joi.string().valid('NFL', 'MLB', 'NBA', 'NHL').required(),
 });
 
-
 export const commentsSchema = Joi.object({
   title: Joi.string().max(50).required(),
 

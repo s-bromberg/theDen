@@ -1,5 +1,7 @@
 import express from 'express';
 import pool from '../db/pool.js';
+import multer from 'multer';
+import sessionOnly from '../validation/sessionOnly.js';
 
 const router = express.Router();
 
@@ -43,6 +45,32 @@ router.get('/:userId', async (req, res, next) => {
     console.log(err);
     next(err);
   }
+});
+
+const storage = multer.diskStorage({
+  destination: './public/images/',
+  filename: (req, file, cb) => {
+    const ext = file.mimetype.split('/')[1];
+    const filename =
+      `${file.fieldname}_${Date.now()}_${Math.round(Math.random() * 1E9)}.${ext}`;
+    cb(null, filename);
+  }
+})
+const upload = multer({
+  storage,
+  fileFilter(req, file, cb) {
+    //check for
+    //   valid mimetype
+    
+  },
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB limit
+  },
+});
+
+router.post('/:userId/upload',/* sessionOnly,*/ upload.single('uploaded_file'), (req, res, next) => {
+  console.log(req.headers['content-type'], req.file)
+  res.end()
 });
 
 export default router;
