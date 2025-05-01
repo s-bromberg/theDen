@@ -61,7 +61,7 @@ const upload = multer({
   fileFilter(req, file, cb) {
     //check for
     //   valid mimetype
-    
+    cb(null, true);
   },
   limits: {
     fileSize: 5 * 1024 * 1024, // 5MB limit
