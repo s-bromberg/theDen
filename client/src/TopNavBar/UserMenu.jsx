@@ -1,9 +1,16 @@
-import { useState } from "react";
-import { Box, IconButton, Menu, MenuItem, Typography, Avatar, Tooltip } from "@mui/material";
+import { useState } from 'react';
+import {
+  Box,
+  IconButton,
+  Menu,
+  MenuItem,
+  Typography,
+  Avatar,
+  Tooltip,
+} from '@mui/material';
 
 const SETTINGS = ['Profile', 'Account', 'Logout'];
 export default function UserMenu() {
-
   const [userAnchor, setUserAnchor] = useState(null);
   const handleOpenUserMenu = e => {
     setUserAnchor(e.currentTarget);
@@ -38,12 +45,10 @@ export default function UserMenu() {
       >
         {SETTINGS.map(setting => (
           <MenuItem key={setting} onClick={handleCloseUserMenu}>
-            <Typography sx={{ textAlign: 'center' }}>
-              {setting}
-            </Typography>
+            <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
           </MenuItem>
         ))}
       </Menu>
     </Box>
-  )
+  );
 }

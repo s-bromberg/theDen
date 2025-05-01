@@ -1,9 +1,4 @@
-import {
-  AppBar,
-  Toolbar,
-  Container,
-  Link,
-} from '@mui/material';
+import { AppBar, Toolbar, Container, Link } from '@mui/material';
 import HideOnScroll from './HideOnScroll';
 import NavMenuSmall from './NavMenuSmall';
 import AppTitle from './AppTitle';
@@ -12,23 +7,15 @@ import UserMenu from './UserMenu';
 import { Link as RouterLink } from 'react-router';
 
 const PAGES = [
-  <Link
-    component={RouterLink}
-    to="/users"
-    underline="none"
-    color='inherit'
-  >
+  <Link component={RouterLink} to="/users" underline="none" color="inherit">
     Users
   </Link>,
-  'NFL', 'NBA', 'MLB',
-  <Link
-    component={RouterLink}
-    to="/posts"
-    underline="none"
-    color='inherit'
-  >
+  'NFL',
+  'NBA',
+  'MLB',
+  <Link component={RouterLink} to="/posts" underline="none" color="inherit">
     All Posts
-  </Link>
+  </Link>,
 ];
 
 function NavBar() {

@@ -1,7 +1,11 @@
-import { Alert, Box, Button, Snackbar } from "@mui/material";
+import { Alert, Box, Button, Snackbar } from '@mui/material';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 
-export default function NewPostAlert({ snackbarState, setSnackbarState, changePage }) {
+export default function NewPostAlert({
+  snackbarState,
+  setSnackbarState,
+  changePage,
+}) {
   const handleClose = () => setSnackbarState(false);
   return (
     <Box sx={{ width: 500 }}>
@@ -20,7 +24,11 @@ export default function NewPostAlert({ snackbarState, setSnackbarState, changePa
             info: <PostAddIcon fontSize="inherit" />,
           }}
           action={
-            <Button color="inherit" size="small" onClick={() => changePage(null, 1)}>
+            <Button
+              color="inherit"
+              size="small"
+              onClick={() => changePage(null, 1)}
+            >
               SEE POST
             </Button>
           }
@@ -29,5 +37,5 @@ export default function NewPostAlert({ snackbarState, setSnackbarState, changePa
         </Alert>
       </Snackbar>
     </Box>
-  )
+  );
 }

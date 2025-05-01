@@ -25,5 +25,5 @@ export default function AppTitle() {
         THE DEN
       </Typography>
     </>
-  )
+  );
 }

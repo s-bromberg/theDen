@@ -13,6 +13,13 @@ function App() {
   let theme = createTheme({
     colorSchemes: {
       dark: true,
+      light: {
+        palette: {
+          info: {
+            main: '#121212',
+          },
+        },
+      },
     },
   });
 

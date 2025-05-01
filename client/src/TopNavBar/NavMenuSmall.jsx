@@ -1,6 +1,6 @@
-import { Box, IconButton, Menu, MenuItem, Typography } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import { useState } from "react";
+import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import { useState } from 'react';
 
 // const PAGES = ['Users', 'NFL', 'NBA', 'MLB', 'All Posts'];
 
@@ -17,11 +17,7 @@ export default function MenuSmall({ pages }) {
 
   return (
     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-      <IconButton
-        size="large"
-        onClick={handleOpenNavMenu}
-        color="inherit"
-      >
+      <IconButton size="large" onClick={handleOpenNavMenu} color="inherit">
         <MenuIcon />
       </IconButton>
       <Menu
@@ -47,5 +43,5 @@ export default function MenuSmall({ pages }) {
         ))}
       </Menu>
     </Box>
-  )
+  );
 }

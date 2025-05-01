@@ -2,6 +2,7 @@ import { Box, Pagination } from '@mui/material';
 import { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import NewPostAlert from './NewPostAlert';
+import Post from './Post';
 // import { /*useLoaderData,*/ useNavigate } from "react-router";
 // add mui backdrop component on load
 // mui pagination component for navigating posts
@@ -34,9 +35,7 @@ export default function Posts() {
   useEffect(() => {
     (async () => {
       try {
-        const response = await fetch(
-          `http://localhost:8080/api/posts/count`,
-        );
+        const response = await fetch(`http://localhost:8080/api/posts/count`);
         const { postCount } = await response.json();
         console.log('postCount --->', postCount);
         setNewestPost(postCount);
@@ -63,33 +62,39 @@ export default function Posts() {
       setNewestPost(newestPost + 1);
     };
 
-    socket.on('newPost', receivePost)
+    socket.on('newPost', receivePost);
 
-    return () => socket.off('newPost', receivePost)
+    return () => socket.off('newPost', receivePost);
   }, [offset, newestPost, posts, socket]);
 
   const displayPosts = () => {
     posts.forEach(p => console.log(new Date(p.created_at).toLocaleString()));
-    return (posts.map(post => (
-      <div key={post.id}>
-        {post.id} - by:{post.author} - {post.title} - {post.body} - at:{new Date(post.created_at).toLocaleString()}
-      </div>)
-    ))
-  }
+    return posts.map(post => (
+      <Post post={post}/>
+    ));
+  };
 
   const handlePageChange = (e, page) => {
-    setOffset(LIMIT * (page - 1))
+    setOffset(LIMIT * (page - 1));
     setPage(page);
-  }
-  return (
-    posts.length ?
-      <Box>
-        <NewPostAlert snackbarState={snackbarState} setSnackbarState={setSnackbarState} changePage={handlePageChange}/>
-        <div>
-          {displayPosts()}
-        </div>
-        <Pagination count={Math.ceil(newestPost / 5)} shape="rounded" page={page} onChange={handlePageChange} />
-      </Box>
-      : <div>no length</div>
+  };
+
+  return posts.length ? (
+    <Box>
+      <NewPostAlert
+        snackbarState={snackbarState}
+        setSnackbarState={setSnackbarState}
+        changePage={handlePageChange}
+      />
+      <div>{displayPosts()}</div>
+      <Pagination
+        count={Math.ceil(newestPost / 5)}
+        shape="rounded"
+        page={page}
+        onChange={handlePageChange}
+      />
+    </Box>
+  ) : (
+    <div>no length</div>
   );
 }
