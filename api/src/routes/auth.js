@@ -36,8 +36,8 @@ router.post('/register', validate(newUserSchema), async (req, res, next) => {
     // console.log('in catch --->', err);
     if (err.code === 'ER_DUP_ENTRY') {
       err.message = err.sqlMessage.includes('email')
-        ? 'Email already exists'
-        : 'Username already exists';
+        ? 'An account with that email address already exists'
+        : 'An account with that username already exists';
       err.statusCode = 409;
     }
     next(err);

@@ -53,7 +53,12 @@ const validMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
 const validExtensions = ['.jpg', '.jpeg', '.png', '.webp'];
 
 const storage = multer.diskStorage({
-  destination: './public/images/avatars',
+  destination: async (req, file, cb) => {
+    const { id } = req.session.user;
+    const dir = await fs.mkdir(`./public/images/avatars/${id}`, { recursive: true });    
+    cb(null, dir || `./public/images/avatars/${id}`);
+  },
+
   filename: (req, file, cb) => {
     console.log(file);
     const ext = file.mimetype.split('/')[1];
@@ -82,8 +87,7 @@ const upload = multer({
   },
 });
 
-router.put(
-  '/upload-avatar',
+router.put('/upload-avatar',
   sessionOnly,
   upload.single('avatar'),
   async (req, res, next) => {
@@ -111,21 +115,18 @@ router.put(
 );
 
 async function deleteOldAvatar(userId) {
-  const dir = 'public/images/avatars';
+  const dir = 'public/images/avatars/' + userId;
   const avatars = await fs.readdir(dir);
-  const userAvatars = avatars.filter(avatar =>
-    avatar.includes(`_user${userId}`),
-  );
 
-  if (userAvatars.length > 1) {
-    userAvatars.sort(
-      (a, b) => Number(a.split('_')[0]) - Number(b.split('-')[0]),
+  if (avatars.length > 1) {
+    avatars.sort(
+      (a, b) => Number(a.split('_')[0]) - Number(b.split('_')[0]),
     );
 
-    userAvatars.pop();
-    userAvatars.forEach(avatar => fs.unlink(`${dir}/${avatar}`));
+    avatars.pop();
+    avatars.forEach(avatar => fs.unlink(`${dir}/${avatar}`));
   }
-  console.log(userAvatars);
+  console.log(avatars);
 }
 
 export default router;

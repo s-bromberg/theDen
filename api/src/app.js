@@ -58,7 +58,7 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-  // console.log('----> in error middleware', err);
+  console.log('----> in error middleware', err);
   res.statusCode = err.statusCode || 500;
   res.send(err.message);
 });
