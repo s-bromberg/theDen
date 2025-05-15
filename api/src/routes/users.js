@@ -110,19 +110,20 @@ router.put(
   },
 );
 
-deleteOldAvatar(21);
-
 async function deleteOldAvatar(userId) {
   const dir = 'public/images/avatars';
   const avatars = await fs.readdir(dir);
   const userAvatars = avatars.filter(avatar =>
     avatar.includes(`_user${userId}`),
   );
+
   if (userAvatars.length > 1) {
     userAvatars.sort(
       (a, b) => Number(a.split('_')[0]) - Number(b.split('-')[0]),
     );
-    fs.unlink(`${dir}/${userAvatars[0]}`);
+
+    userAvatars.pop();
+    userAvatars.forEach(avatar => fs.unlink(`${dir}/${avatar}`));
   }
   console.log(userAvatars);
 }
