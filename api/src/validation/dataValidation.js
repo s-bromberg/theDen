@@ -19,13 +19,10 @@ export const newUserSchema = Joi.object({
         'Password must be between 8 and 20 characters, include at least one uppercase letter, one lowercase letter, one number, and one special character',
     }),
 
-  repeatPassword: Joi.string()
-    .valid(Joi.ref('password'))
-    .required()
-    .messages({
-      'any.only': 'Repeat password must match password',
-      'any.required': 'Repeat password is required',
-    }),
+  repeatPassword: Joi.string().valid(Joi.ref('password')).required().messages({
+    'any.only': 'Repeat password must match password',
+    'any.required': 'Repeat password is required',
+  }),
 
   email: Joi.string()
     .email({

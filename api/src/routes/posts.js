@@ -6,7 +6,7 @@ import { validate, postSchema } from '../validation/dataValidation.js';
 const router = express.Router();
 router.use((req, res, next) => {
   req.sql = `
-    SELECT p.id, concat_ws(' ', u.first_name, u.last_name) AS author, p.title, p.body, p.created_at, c.category_name
+    SELECT p.id, concat_ws(' ', u.first_name, u.last_name) AS author, u.profile_image, p.title, p.body, p.created_at, c.category_name
     FROM posts p
     JOIN categories c ON c.id = p.category
     JOIN users u 

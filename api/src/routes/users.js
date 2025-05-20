@@ -4,6 +4,7 @@ import multer from 'multer';
 import sessionOnly from '../validation/sessionOnly.js';
 import path from 'path';
 import { promises as fs } from 'fs';
+import sharp from 'sharp';
 
 const router = express.Router();
 
@@ -55,7 +56,9 @@ const validExtensions = ['.jpg', '.jpeg', '.png', '.webp'];
 const storage = multer.diskStorage({
   destination: async (req, file, cb) => {
     const { id } = req.session.user;
-    const dir = await fs.mkdir(`./public/images/avatars/${id}`, { recursive: true });    
+    const dir = await fs.mkdir(`./public/images/avatars/${id}`, {
+      recursive: true,
+    });
     cb(null, dir || `./public/images/avatars/${id}`);
   },
 
@@ -87,18 +90,44 @@ const upload = multer({
   },
 });
 
-router.put('/upload-avatar',
+router.put(
+  '/upload-avatar',
   sessionOnly,
   upload.single('avatar'),
   async (req, res, next) => {
     const { id } = req.session.user;
-    console.log(id);
+    const { file } = req;
+
+    if (!file) {
+      const err = new Error('No file uploaded');
+      err.statusCode = 400;
+      return next(err);
+    }
+
+    const ext = path.extname(file.filename)
+    const fileName = path.basename(file.filename, ext);
+    console.log('fileName -->', fileName);
+    const resizedPath = `${file.destination}/${fileName}_resized${ext}`
+    console.log('resizedPath -->', resizedPath);
     try {
+      await sharp(file.path)
+        .resize({
+          height: 500,
+          width: 500,
+          fit: 'contain',
+          background: { r: 255, g: 255, b: 255, alpha: 1 },
+        })
+        .toFile(resizedPath);
+
+      console.log('resizedPath -->', resizedPath);
+      const dbPath = resizedPath.replace('./public/', '').replaceAll('\\', '/');
+      console.log('dbPath -->', dbPath);
+
       const [result] = await pool.execute(
         `UPDATE users
         SET profile_image = ?
         WHERE ID = ?`,
-        [req.file.path, id],
+        [dbPath, id],
       );
 
       if (result.affectedRows === 0) {
@@ -119,9 +148,7 @@ async function deleteOldAvatar(userId) {
   const avatars = await fs.readdir(dir);
 
   if (avatars.length > 1) {
-    avatars.sort(
-      (a, b) => Number(a.split('_')[0]) - Number(b.split('_')[0]),
-    );
+    avatars.sort((a, b) => Number(a.split('_')[0]) - Number(b.split('_')[0]));
 
     avatars.pop();
     avatars.forEach(avatar => fs.unlink(`${dir}/${avatar}`));
