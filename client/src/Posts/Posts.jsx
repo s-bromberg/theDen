@@ -67,12 +67,13 @@ export default function Posts() {
     return () => socket.off('newPost', receivePost);
   }, [offset, newestPost, posts, socket]);
 
-  const displayPosts = () => {
-    posts.forEach(p => console.log(new Date(p.created_at).toLocaleString()));
-    return posts.map(post => (
-      <Post post={post}/>
-    ));
-  };
+  //const displayPosts = posts.map(post => <Post post={post} />)
+  // () => {
+  //   posts.forEach(p => console.log(new Date(p.created_at).toLocaleString()));
+  //   return posts.map(post => (
+  //     <Post post={post}/>
+  //   ));
+  // };
 
   const handlePageChange = (e, page) => {
     setOffset(LIMIT * (page - 1));
@@ -86,7 +87,7 @@ export default function Posts() {
         setSnackbarState={setSnackbarState}
         changePage={handlePageChange}
       />
-      <div>{displayPosts()}</div>
+      {posts.map(post => <Post key={post.id} post={post} />)}
       <Pagination
         count={Math.ceil(newestPost / 5)}
         shape="rounded"

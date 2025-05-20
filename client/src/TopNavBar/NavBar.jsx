@@ -4,19 +4,21 @@ import NavMenuSmall from './NavMenuSmall';
 import AppTitle from './AppTitle';
 import NavMenuLarge from './NavMenuLarge';
 import UserMenu from './UserMenu';
-import { Link as RouterLink } from 'react-router';
+import RouterLink from '../RouterLink';
+// import { Link as RouterLink } from 'react-router';
 
-const PAGES = [
-  <Link component={RouterLink} to="/users" underline="none" color="inherit">
-    Users
-  </Link>,
-  'NFL',
-  'NBA',
-  'MLB',
-  <Link component={RouterLink} to="/posts" underline="none" color="inherit">
-    All Posts
-  </Link>,
-];
+// const PAGES = [
+//   // <Link component={RouterLink} to="/users" underline="none" color="inherit">
+//   //   Users
+//   // </Link>,
+//   { name: 'NFL', path: '/' },
+//   { name: 'NBA', path: '/' },
+//   { name: 'MLB', path: '/' },
+//   { name: 'All Posts', path: '/posts' }
+//   // <RouterLink path={'/posts'}>
+//   //   All Posts
+//   // </RouterLink>
+// ];
 
 function NavBar() {
   return (
@@ -24,9 +26,9 @@ function NavBar() {
       <AppBar position="sticky">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <NavMenuSmall pages={PAGES} />
+            <NavMenuSmall />
             <AppTitle />
-            <NavMenuLarge pages={PAGES} />
+            <NavMenuLarge />
             <UserMenu />
           </Toolbar>
         </Container>
